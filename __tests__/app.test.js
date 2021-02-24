@@ -29,4 +29,10 @@ describe("App", () => {
         const response = await request(app).post("/jumplings").send(newJumpling).expect(201);
         expect(response.body).toMatchObject(expectedResponse)
     });
+
+    it("GET /jumplings/:name should return the person object with the correct name", async () => {
+        const expectedResponse = { "id": 1, "name": "Jeff" }
+        const response = await request(app).get("/jumplings/Jeff").expect(200);
+        expect(response.body).toMatchObject(expectedResponse)
+    });
   });

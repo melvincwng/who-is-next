@@ -36,6 +36,11 @@ app.post("/jumplings", (req, res) => {
     res.status(201).json(newJumpling)
 });
 
+app.get("/jumplings/:name", (req, res)=> {
+    let selectedJumpling = jumplings.find((jumpling) => jumpling.name === req.params.name);
+    res.status(200).json(selectedJumpling);
+})
+
 // ERROR HANDLERS or JOI VALIDATION
 app.use((err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
