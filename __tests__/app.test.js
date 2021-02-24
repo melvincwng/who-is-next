@@ -22,4 +22,11 @@ describe("App", () => {
         const response = await request(app).get("/jumplings").expect(200);
         expect(response.body).toEqual(expectedResponse)
     });
+
+    it("POST /jumplings should return the person object you posted", async () => {
+        const newJumpling = { "name": "Jeff"}
+        const expectedResponse = { "id": 1, "name": "Jeff" };
+        const response = await request(app).post("/jumplings").send(newJumpling).expect(201);
+        expect(response.body).toMatchObject(expectedResponse)
+    });
   });

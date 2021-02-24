@@ -19,11 +19,21 @@ const jumplings = [];
 
 // ROUTES
 app.get("/", (req, res) => {
-    res.status(200).send(object);
+    res.status(200).json(object);
 });
 
 app.get("/jumplings", (req, res) => {
-    res.status(200).send(jumplings);
+    res.status(200).json(jumplings);
+});
+
+app.post("/jumplings", (req, res) => {
+    let newJumpling = {
+        id: jumplings.length + 1,
+        name: req.body.name
+    };
+
+    jumplings.push(newJumpling);
+    res.status(201).json(newJumpling)
 });
 
 // ERROR HANDLERS or JOI VALIDATION
