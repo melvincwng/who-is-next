@@ -49,4 +49,9 @@ describe("App", () => {
         expect(response.body).toMatchObject(expectedDeletedResponse)
     });
 
+    it("GET /jumplings/presenter should return a randomly chosen person from the jumplings array", async () => {
+        const response = await request(app).get("/jumplings/presenter").expect(200);
+        expect(Object.keys(response.body).length).toEqual(2) // instead of { "id": 2, "name": "xxx" } as seen in question paper, just test that the response.body.length = 1 (aka returns an object)
+    });
+
   });

@@ -14,6 +14,11 @@ const object = {
     "7": "GET    /jumplings/presenter"
   };
 const jumplings = [];
+const jumplings2  = [ // specific array created for question 6
+    { id: 1, name: "XXX" },
+    { id: 2, name: "YYY"},
+    { id: 3, name: "ZZZ"}
+];
 
 // PARAMS PROCESSING
 
@@ -35,6 +40,13 @@ app.post("/jumplings", (req, res) => {
     jumplings.push(newJumpling);
     res.status(201).json(newJumpling)
 });
+
+// this answer line 43 - 51 is for question 6 => however since /presenter will clash with /:name => the machine will see 'presenter' as a 'name', hence need to put above name to detect it
+app.get("/jumplings/presenter", (req, res) => {
+    let randomNumberIndex = Math.floor(Math.random() * (jumplings2.length)) + 1; //generate a random number from 1 to 3
+    let selectedJumpling = jumplings2.find((jumpling) => jumpling.id === randomNumberIndex)
+    res.status(200).json(selectedJumpling)
+})
 
 app.get("/jumplings/:name", (req, res)=> {
     let selectedJumpling = jumplings.find((jumpling) => jumpling.name === req.params.name);
