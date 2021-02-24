@@ -48,7 +48,7 @@ router.get("/", (req, res) => {
     res.status(200).json(jumplings);
 });
 
-router.post("/", requireJsonContent, (req, res) => {
+router.post("/", requireJsonContent, (req, res, next) => { // dont forget put next here
     let newJumpling = {
         id: jumplings.length + 1,
         name: req.body.name
@@ -60,10 +60,10 @@ router.post("/", requireJsonContent, (req, res) => {
       // 400 Bad Request
       error.statusCode = 400;
       next(error);
-      }
-
-    jumplings.push(newJumpling);
-    res.status(201).json(newJumpling)
+    } else {
+        jumplings.push(newJumpling);
+        res.status(201).json(newJumpling)
+    }
 });
 
 // this answer line 43 - 51 is for question 6 => however since /presenter will clash with /:name => the machine will see 'presenter' as a 'name', hence need to put above name to detect it
@@ -77,16 +77,17 @@ router.get("/:name", (req, res)=> {
     res.status(200).json(req.selectedJumplingByName);
 })
 
-router.put("/:id", requireJsonContent, (req, res) => {
+router.put("/:id", requireJsonContent, (req, res, next) => {
     const validation = validateJumpling(req.body);
     if (validation.error) {
       const error = new Error(validation.error.details[0].message); //validation.errors.details returns an array with 1 object at index 0, that object has message property -> returns a string message
       // 400 Bad Request
       error.statusCode = 400;
       next(error);
+      } else {
+          req.selectedJumpling.name = req.body.name;
+          res.status(200).json(req.selectedJumpling);
       }
-    req.selectedJumpling.name = req.body.name;
-    res.status(200).json(req.selectedJumpling);
 })
 
 router.delete("/:id", (req, res) => {
