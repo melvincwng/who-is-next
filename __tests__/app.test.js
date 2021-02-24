@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../src/routes/app");
+const app = require("../src/app");
 
 describe("App", () => {
     it("GET / should return a JSON object with 7 property key/value pairs", async () => {
