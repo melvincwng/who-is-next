@@ -41,6 +41,12 @@ app.get("/jumplings/:name", (req, res)=> {
     res.status(200).json(selectedJumpling);
 })
 
+app.put("/jumplings/:id", (req, res) => {
+    let selectedJumpling = jumplings.find((jumpling) => jumpling.id === parseInt(req.params.id)); //req.params.id is a string (i.e "1"), hence need to parseInt()
+    selectedJumpling.name = req.body.name;
+    res.status(200).json(selectedJumpling);
+})
+
 // ERROR HANDLERS or JOI VALIDATION
 app.use((err, req, res, next) => {
     err.statusCode = err.statusCode || 500;

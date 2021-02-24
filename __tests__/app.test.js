@@ -14,7 +14,7 @@ describe("App", () => {
             "7": "GET    /jumplings/presenter"
           };
         const response = await request(app).get("/").expect(200);
-        expect(response.body).toMatchObject(expectedResponse)
+        expect(response.body).toMatchObject(expectedResponse);
     });
 
     it("GET /jumplings should return a empty array", async () => {
@@ -24,15 +24,23 @@ describe("App", () => {
     });
 
     it("POST /jumplings should return the person object you posted", async () => {
-        const newJumpling = { "name": "Jeff"}
+        const newJumpling = { "name": "Jeff"};
         const expectedResponse = { "id": 1, "name": "Jeff" };
         const response = await request(app).post("/jumplings").send(newJumpling).expect(201);
         expect(response.body).toMatchObject(expectedResponse)
     });
 
     it("GET /jumplings/:name should return the person object with the correct name", async () => {
-        const expectedResponse = { "id": 1, "name": "Jeff" }
+        const expectedResponse = { "id": 1, "name": "Jeff" };
         const response = await request(app).get("/jumplings/Jeff").expect(200);
         expect(response.body).toMatchObject(expectedResponse)
     });
+
+    it("PUT /jumplings/:id should return the person object with the edited name", async () => {
+        const updatedJumpling = { "name": "Jeff This has been EDITED" };
+        const expectedResponse = { "id": 1, "name": "Jeff This has been EDITED" };
+        const response = await request(app).put("/jumplings/1").send(updatedJumpling).expect(200);
+        expect(response.body).toMatchObject(expectedResponse)
+    });
+    
   });
