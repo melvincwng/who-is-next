@@ -16,4 +16,10 @@ describe("App", () => {
         const response = await request(app).get("/").expect(200);
         expect(response.body).toMatchObject(expectedResponse)
     });
+
+    it("GET /jumplings should return a empty array", async () => {
+        const expectedResponse = [];
+        const response = await request(app).get("/jumplings").expect(200);
+        expect(response.body).toEqual(expectedResponse)
+    });
   });

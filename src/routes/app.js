@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+//DATA
 const object = {
     "0": "GET    /",
     "1": "GET    /jumplings",
@@ -12,12 +13,20 @@ const object = {
     "6": "-----------------------",
     "7": "GET    /jumplings/presenter"
   };
+const jumplings = [];
 
-app.get("/", (req, res, next) => {
-    res.status(200).send(objectz);
-    next(err);
-})
+// PARAMS PROCESSING
 
+// ROUTES
+app.get("/", (req, res) => {
+    res.status(200).send(object);
+});
+
+app.get("/jumplings", (req, res) => {
+    res.status(200).send(jumplings);
+});
+
+// ERROR HANDLERS or JOI VALIDATION
 app.use((err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
     res.status(err.statusCode).send(err.message);
