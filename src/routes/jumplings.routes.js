@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const Joi = require("joi");
 
 //1) DATA
 const jumplings = [];
@@ -8,6 +9,15 @@ const jumplings2  = [ // specific array created for question 6
     { id: 2, name: "YYY"},
     { id: 3, name: "ZZZ"}
 ];
+
+// JOI VALIDATION (FOR POST & PUT REQUESTS ONLY)
+function validateJumpling(jumpling) {
+  const schema = Joi.object({
+    id: Joi.number().integer(),
+    name: Joi.string().min(3).required()
+  });
+  return schema.validate(jumpling);
+}
 
 // 2) MIDDLEWARE LIKE PARAMS PROCESSING OR JSON-REQUIRING MIDDLEWARE
 const requireJsonContent = (req, res, next) => {
@@ -44,6 +54,14 @@ router.post("/", requireJsonContent, (req, res) => {
         name: req.body.name
     };
 
+    const validation = validateJumpling(req.body);
+    if (validation.error) {
+      const error = new Error(validation.error.details[0].message); //validation.errors.details returns an array with 1 object at index 0, that object has message property -> returns a string message
+      // 400 Bad Request
+      error.statusCode = 400;
+      next(error);
+      }
+
     jumplings.push(newJumpling);
     res.status(201).json(newJumpling)
 });
@@ -60,6 +78,13 @@ router.get("/:name", (req, res)=> {
 })
 
 router.put("/:id", requireJsonContent, (req, res) => {
+    const validation = validateJumpling(req.body);
+    if (validation.error) {
+      const error = new Error(validation.error.details[0].message); //validation.errors.details returns an array with 1 object at index 0, that object has message property -> returns a string message
+      // 400 Bad Request
+      error.statusCode = 400;
+      next(error);
+      }
     req.selectedJumpling.name = req.body.name;
     res.status(200).json(req.selectedJumpling);
 })
