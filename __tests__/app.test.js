@@ -42,5 +42,11 @@ describe("App", () => {
         const response = await request(app).put("/jumplings/1").send(updatedJumpling).expect(200);
         expect(response.body).toMatchObject(expectedResponse)
     });
-    
+
+    it("DELETE /jumplings/:id should return the deleted person object", async () => {
+        const expectedDeletedResponse = { "id": 1, "name": "Jeff This has been EDITED" };
+        const response = await request(app).delete("/jumplings/1").expect(200);
+        expect(response.body).toMatchObject(expectedDeletedResponse)
+    });
+
   });

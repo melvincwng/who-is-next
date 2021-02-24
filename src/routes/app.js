@@ -47,6 +47,13 @@ app.put("/jumplings/:id", (req, res) => {
     res.status(200).json(selectedJumpling);
 })
 
+app.delete("/jumplings/:id", (req, res) => {
+    let selectedJumpling = jumplings.find((jumpling) => jumpling.id === parseInt(req.params.id));
+    let index = jumplings.indexOf(selectedJumpling);
+    jumplings.splice(index, 1);
+    res.status(200).json(selectedJumpling);
+})
+
 // ERROR HANDLERS or JOI VALIDATION
 app.use((err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
