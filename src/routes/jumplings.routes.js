@@ -53,7 +53,6 @@ router.get("/", async (req, res, next) => {
     } catch (err) {
       next(err);
     }
-    res.status(200).json(jumplings);
 });
 
 router.post("/", requireJsonContent, async (req, res, next) => { // dont forget put next here
@@ -61,9 +60,9 @@ router.post("/", requireJsonContent, async (req, res, next) => { // dont forget 
       let newJumpling = {
         name: req.body.name
       };
-      const jumpling = await new Jumpling(req.body);
-      const newJumpling = await jumpling.save();
-      res.status(201).json(newJumpling);
+      let jumpling = await new Jumpling(req.body);
+      jumpling = await jumpling.save();
+      res.status(201).json(jumpling);
     } catch (err) {
       next(err);
     }
