@@ -14,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "joi": "^17.4.0"
+    "joi": "^17.4.0",
+    "mongoose": "^5.11.18"
   },
   "devDependencies": {
     "jest": "^26.6.3",
