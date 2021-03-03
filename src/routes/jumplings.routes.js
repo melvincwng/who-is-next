@@ -1,23 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const Joi = require("joi");
+const Jumpling = require('../models/jumpling.model');
+// const Joi = require("joi");
 
 //1) DATA
-const jumplings = [];
+// Since using Jumpling model, these data can be deleted
+/* const jumplings = [];
 const jumplings2  = [ // specific array created for question 6
     { id: 1, name: "XXX" },
     { id: 2, name: "YYY"},
     { id: 3, name: "ZZZ"}
-];
+]; */
 
-// JOI VALIDATION (FOR POST & PUT REQUESTS ONLY)
-function validateJumpling(jumpling) {
+// JOI VALIDATION (FOR POST & PUT REQUESTS ONLY) - REMOVED; AS USING MONGOOSE VALIDATION
+/* function validateJumpling(jumpling) {
   const schema = Joi.object({
     id: Joi.number().integer(),
     name: Joi.string().min(3).required()
   });
   return schema.validate(jumpling);
-}
+} */
 
 // 2) MIDDLEWARE LIKE PARAMS PROCESSING OR JSON-REQUIRING MIDDLEWARE
 const requireJsonContent = (req, res, next) => {
@@ -44,17 +46,35 @@ router.param("name", (req, res, next, id) => {
   });
 
 // 3) ROUTES
-router.get("/", (req, res) => {
+router.get("/", async (req, res, next) => {
+    try {
+      const jumplings = await Jumpling.find({});
+      res.status(200).json(jumplings)
+    } catch (err) {
+      next(err);
+    }
     res.status(200).json(jumplings);
 });
 
-router.post("/", requireJsonContent, (req, res, next) => { // dont forget put next here
-    let newJumpling = {
+router.post("/", requireJsonContent, async (req, res, next) => { // dont forget put next here
+    try {
+      let newJumpling = {
+        name: req.body.name
+      };
+      const jumpling = await new Jumpling(req.body);
+      const newJumpling = await jumpling.save();
+      res.status(201).json(newJumpling);
+    } catch (err) {
+      next(err);
+    }
+
+    /* let newJumpling = {
         id: jumplings.length + 1,
         name: req.body.name
-    };
+    }; */
 
-    const validation = validateJumpling(req.body);
+    // JOI VALIDATION DELETED
+    /* const validation = validateJumpling(req.body);
     if (validation.error) {
       const error = new Error(validation.error.details[0].message); //validation.errors.details returns an array with 1 object at index 0, that object has message property -> returns a string message
       // 400 Bad Request
@@ -63,7 +83,7 @@ router.post("/", requireJsonContent, (req, res, next) => { // dont forget put ne
     } else {
         jumplings.push(newJumpling);
         res.status(201).json(newJumpling)
-    }
+    } */
 });
 
 // this answer line 43 - 51 is for question 6 => however since /presenter will clash with /:name => the machine will see 'presenter' as a 'name', hence need to put above name to detect it
@@ -78,7 +98,10 @@ router.get("/:name", (req, res)=> {
 })
 
 router.put("/:id", requireJsonContent, (req, res, next) => {
-    const validation = validateJumpling(req.body);
+
+
+    // JOI VALIDATION DELETED
+    /* const validation = validateJumpling(req.body);
     if (validation.error) {
       const error = new Error(validation.error.details[0].message); //validation.errors.details returns an array with 1 object at index 0, that object has message property -> returns a string message
       // 400 Bad Request
@@ -87,7 +110,7 @@ router.put("/:id", requireJsonContent, (req, res, next) => {
       } else {
           req.selectedJumpling.name = req.body.name;
           res.status(200).json(req.selectedJumpling);
-      }
+      } */
 })
 
 router.delete("/:id", (req, res) => {
