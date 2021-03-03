@@ -134,6 +134,12 @@ describe("jumplings", () => {
         }
 
     });
+
+    it("should throw error if jumpling does not exist", async () => {
+        const response = await request(app).delete("/jumplings/6sd2anonExistingJumplingID32423s").expect(500);
+        expect(response.status).toBe(500);
+      });
+
   });
 });
 
