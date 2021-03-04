@@ -11,7 +11,7 @@ router.get("/:username", protectRoute, async (req, res, next) => {
     const username = req.params.username;
     const regex = new RegExp(username, "gi");
     const users = await User.find({ username: regex });
-    res.send(users);
+    res.send(users); 
   } catch (err) {
     next(err);
   }
@@ -21,7 +21,7 @@ router.post("/", async (req, res, next) => {
     try {
       const user = new User(req.body);
       const newUser= await user.save();
-      res.send(newUser);
+      res.send(newUser); // default status code is 200, if successful POST request
     } catch (err) {
       next(err);
     }
@@ -50,7 +50,7 @@ router.post("/login", async (req, res, next) => {
       secure: true, // use HTTPS
     });
 
-    res.send("You are now logged in!");
+    res.send("You are now logged in!"); 
   } catch (err) {
     if (err.message === "Login failed") {
       err.statusCode = 400;

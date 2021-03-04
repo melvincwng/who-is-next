@@ -2,7 +2,6 @@ const app = require("../src/app");
 const request = require("supertest");
 const dbHandlers = require("../test/dbHandler")
 const Jumpling = require("../src/models/jumpling.model");
-const { response } = require("../src/app");
 
 describe("jumplings", () => {
 
