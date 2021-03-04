@@ -31,10 +31,18 @@ describe("users", () => {
     afterAll(async () => await dbHandlers.closeDatabase()); //close the DB after all the test cases
 
     describe("GET /users/:username", () => {
-        it("should retrieve an array of jumplings", async () => {
-            const expectedResponse = [ { name: "Person 1" }, { name: "Person 2" } ];
-            const response = await request(app).get("/jumplings").expect(200);
-            expect(response.body).toMatchObject(expectedResponse)
+        it("should return an array containing user information if you are an authorized user/have cookie", async () => {
+            const response = await request(app).get("/users/user1").set("Cookie", `token=${token}`).expect(200);
+
+            expect(response.status).toBe(200);
+            expect(response.body.length).toBe(1);
+            expect(response.body[0].username).toBe("user1");
+        });
+
+        it("should throw an error and return an error message if you are not authorized/no cookie", async () => {
+            const response = await request(app).get("/users/user1").expect(401);
+            expect(response.status).toBe(401);
+            expect(response.text).toBe("You are not authorized");
         });
 
     });
@@ -121,10 +129,10 @@ describe("users", () => {
     });
 
     describe("POST /users/logout", () => {
-        it("should retrieve an array of jumplings", async () => {
-            const expectedResponse = [ { name: "Person 1" }, { name: "Person 2" } ];
-            const response = await request(app).get("/jumplings").expect(200);
-            expect(response.body).toMatchObject(expectedResponse)
+        it("should log you out and return a message", async () => {
+            const expectedMessage = "You are now logged out!";
+            const response = await request(app).post("/users/logout").expect(200);
+            expect(response.text).toBe(expectedMessage)
         });
     });
 });

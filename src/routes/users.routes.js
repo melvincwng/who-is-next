@@ -10,7 +10,7 @@ router.get("/:username", protectRoute, async (req, res, next) => {
   try {
     const username = req.params.username;
     const regex = new RegExp(username, "gi");
-    const users = await User.find({ username: regex });
+    const users = await User.find({ username: regex }); //find all the documents in User model & it will store it into an array, before returning to us.
     res.send(users); 
   } catch (err) {
     next(err);
