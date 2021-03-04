@@ -109,6 +109,20 @@ describe("jumplings", () => {
 
       expect(response.status).toBe(400);
     });
+
+    it("should throw error if you are trying to put a non-existent jumpling", async () => {
+      const newJumpling = { name: "testing123" };
+      const nonExistingJumplingID = "603f3axxxxxxxxx";
+
+      const response = await request(app)
+      .put(`/jumplings/${nonExistingJumplingID}`)
+      .send(newJumpling) 
+      .expect(500)
+
+      expect(response.status).toBe(500);
+
+    });
+
   });
 
   describe("DELETE /jumplings/:id", () => {

@@ -1,10 +1,16 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
+// app.js
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+require("dotenv").config();
 
 //ROUTERS
 const jumplingsRouter = require("../src/routes/jumplings.routes");
+const usersRouter = require("../src/routes/users.routes")
 app.use("/jumplings", jumplingsRouter);
+app.use("/users", usersRouter);
 
 //DATA
 const object = {
