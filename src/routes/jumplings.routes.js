@@ -98,7 +98,7 @@ router.get("/presenter", async (req, res) => {
     await Jumpling.countDocuments({}).exec(function (err, count) {
       let randomNumber = Math.floor(Math.random() * (count)); //generate a random number from 0 to 2
       Jumpling.findOne().skip(randomNumber).exec(function (err, result) {
-          res.status(200).json(result) //result will contain the randomly selected Jumpling
+          res.status(200).json(result) //result will contain the randomly selected jumpling document
       })
       
     });
