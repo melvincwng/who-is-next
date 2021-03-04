@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Jumpling = require('../models/jumpling.model');
+const protectRoute = require("../../middleware/protectRoute");
 // const Joi = require("joi");
 
 //1) DATA
@@ -65,7 +66,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-router.post("/", requireJsonContent, async (req, res, next) => { // dont forget put next here
+router.post("/", requireJsonContent, protectRoute, async (req, res, next) => { // dont forget put next here
     try {
       const jumpling = await new Jumpling(req.body);
       const newJumpling = await jumpling.save();
@@ -116,7 +117,7 @@ router.get("/:name", async (req, res)=> {
   res.status(200).json(req.selectedJumpling);
 }) */
 
-router.put("/:id", requireJsonContent, async (req, res, next) => {
+router.put("/:id", requireJsonContent, protectRoute, async (req, res, next) => {
     try {
       const jumpling = await Jumpling.findByIdAndUpdate(req.selectedJumpling._id, req.body, {new: true, runValidators:true}); // In the Jumpling model, find an instance/document with that ID, and update it with the 2nd parameters. Jumpling model contains all your model instances/documents
       res.status(200).json(jumpling);
@@ -137,7 +138,7 @@ router.put("/:id", requireJsonContent, async (req, res, next) => {
       } */
 })
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", protectRoute, async (req, res, next) => {
   try {
     const deletedJumpling = await Jumpling.findByIdAndDelete(req.selectedJumpling._id);
     res.status(200).json(deletedJumpling)
